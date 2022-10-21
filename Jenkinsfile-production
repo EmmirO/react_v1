@@ -3,15 +3,21 @@ pipeline {
         docker {
             image 'node:14-alpine3.15'
             args '-p 8080:8080'
-        }
-    }
-     environment {
-            STAGING = 'true'
-			PRODUCTION = 'true'
-
-        }
+				}		
+			}
+		}
+        
     stages {
-        stage('Deploy') {
+         stage('Deploy') {
+            
+            agent {
+                docker {
+                    registryUrl "594268057092.dkr.ecr.eu-central-1.amazonaws.com/ecr-task-repo-mop"
+                    registryCredentialsId "${ECR_CREDENTIALS}"
+                }
+            }
+		
+		stage('Deploy') {
             steps {
                 sh 'npm install'
             }
